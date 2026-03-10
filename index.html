@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+  <title>职业倦怠测试 · 手机电脑自适应</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Roboto, system-ui, -apple-system, sans-serif;
+    }
+
+    body {
+      background-color: #cde4ff;  /* 柔和浅蓝 */
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 12px;
+    }
+
+    /* 主卡片容器 */
+    .test-container {
+      width: 100%;
+      max-width: 1000px;
+      background-color: rgba(255, 255, 255, 0.5);
+      backdrop-filter: blur(3px);
+      border-radius: 36px 36px 30px 30px;
+      box-shadow: 0 20px 30px -8px rgba(0, 70, 120, 0.25);
+      padding: 20px;
+    }
+
+    /* 三个面板共用卡片 */
+    .panel {
+      background-color: #ffffffdd;
+      backdrop-filter: blur(4px);
+      border-radius: 32px;
+      padding: 28px 24px;
+      box-shadow: 0 8px 18px rgba(0, 60, 100, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.7);
+      transition: opacity 0.2s;
+    }
+
+    /* 封面 */
+    #cover {
+      text-align: center;
+      background: linear-gradient(135deg, #ffffff, #e6f2ff);
+    }
+
+    .cover-title {
+      font-size: clamp(2.2rem, 10vw, 3rem);
+      font-weight: 500;
+      letter-spacing: 2px;
+      color: #154a6e;
+      margin: 15px 0 5px;
+      text-shadow: 2px 2px 0 rgba(160, 210, 255, 0.6);
+    }
+
+    .cover-sub {
+      font-size: clamp(1rem, 4vw, 1.3rem);
+      color: #2b5f84;
+      margin-bottom: 35px;
+      border-bottom: 2px dashed #9ac4db;
+      padding-bottom: 15px;
+      display: inline-block;
+    }
+
+    .cover-icon {
+      font-size: 4rem;
+      margin: 10px 0;
+      filter: drop-shadow(4px 6px 0 #b8d6ec);
+    }
+
+    .btn {
+      background: #1e6f9f;
+      border: none;
+      color: white;
+      font-size: clamp(1.2rem, 5vw, 1.5rem);
+      font-weight: 500;
+      padding: 14px 30px;
+      border-radius: 60px;
+      cursor: pointer;
+      box-shadow: 0 8px 0 #0e3b55, 0 10px 18px rgba(0, 50, 80, 0.2);
+      transition: all 0.08s linear;
+      margin: 25px 0 20px;
+      border: 1px solid #b0dcff;
+      width: fit-content;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .btn:active {
+      transform: translateY(6px);
+      box-shadow: 0 2px 0 #0e3b55, 0 5px 12px rgba(0, 50, 80, 0.2);
+    }
+
+    .btn-small {
+      font-size: 1.1rem;
+      padding: 10px 24px;
+      box-shadow: 0 5px 0 #0e3b55, 0 6px 12px rgba(0, 50, 80, 0.15);
+      margin: 8px 8px;
+      min-width: 130px;
+    }
+
+    /* ---------- 问卷表格 (基础样式) ---------- */
+    .quiz-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0 15px;
+      font-size: 1rem;
+      background: #f5faff;
+      border-radius: 24px;
+      overflow: hidden;
+      box-shadow: 0 6px 14px rgba(0, 40, 70, 0.06);
+    }
+
+    .quiz-table th {
+      background-color: #c2e2f5;
+      color: #05415f;
+      font-weight: 600;
+      font-size: 1.05rem;
+      padding: 16px 6px;
+      text-align: center;
+      border-bottom: 2px solid #7fb4d3;
+    }
+
+    .quiz-table td {
+      padding: 14px 6px;
+      border-bottom: 1px solid #cbe0ed;
+      vertical-align: middle;
+      background-color: #ffffffd9;
+    }
+
+    .quiz-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .question-cell {
+      text-align: left;
+      font-weight: 500;
+      color: #113e57;
+      padding-left: 18px !important;
+      word-break: break-word;
+    }
+
+    .option-cell {
+      text-align: center;
+      width: 12%;
+    }
+
+    /* 单选标签样式 */
+    .radio-label {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      background: #ecf5fa;
+      padding: 8px 16px;
+      border-radius: 40px;
+      font-size: 1rem;
+      font-weight: 500;
+      color: #124263;
+      border: 1px solid #afcde0;
+      cursor: pointer;
+      transition: 0.1s;
+      box-shadow: inset 0 1px 3px white, 0 2px 3px rgba(0,0,0,0.02);
+      width: 100%;
+      max-width: 130px;
+      margin: 0 auto;
+    }
+
+    .radio-label:hover {
+      background: #d5e9fa;
+      border-color: #5f9ec9;
+    }
+
+    input[type="radio"] {
+      accent-color: #1f6fa5;
+      width: 18px;
+      height: 18px;
+      margin: 0;
+      cursor: pointer;
+    }
+
+    .letter-badge {
+      font-weight: 600;
+      margin-right: 2px;
+    }
+
+    /* 结果卡片 */
+    .result-box {
+      text-align: center;
+    }
+
+    .score-display {
+      font-size: clamp(3rem, 15vw, 5rem);
+      font-weight: 600;
+      color: #0b3f5e;
+      background: #d7edff;
+      display: inline-block;
+      padding: 10px 40px;
+      border-radius: 120px;
+      margin: 25px 0 20px;
+      border: 3px solid white;
+      box-shadow: inset 0 -3px 0 #a0c4e2;
+      line-height: 1.2;
+    }
+
+    .verdict {
+      background: #eaf4fb;
+      padding: 24px 20px;
+      border-radius: 32px;
+      font-size: clamp(1.1rem, 4vw, 1.3rem);
+      color: #023048;
+      line-height: 1.6;
+      margin: 20px 0 25px;
+      border-left: 8px solid #197bbd;
+      text-align: left;
+    }
+
+    .footnote {
+      color: #1a577b;
+      margin: 25px 0 10px;
+      font-size: 0.95rem;
+    }
+
+    .action-group {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 16px;
+      margin-top: 30px;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .reminder {
+      color: #2d6182;
+      background: #e1effb;
+      padding: 12px;
+      border-radius: 50px;
+      font-size: 0.95rem;
+      margin: 10px 0 5px;
+      text-align: center;
+    }
+
+    /* ---------- 移动端优化 (宽度 ≤ 700px) ---------- */
+    @media screen and (max-width: 700px) {
+      .panel {
+        padding: 20px 16px;
+      }
+
+      /* 表格重置为卡片模式 */
+      .quiz-table thead {
+        display: none;  /* 隐藏表头 */
+      }
+
+      .quiz-table,
+      .quiz-table tbody,
+      .quiz-table tr,
+      .quiz-table td {
+        display: block;
+        width: 100%;
+      }
+
+      .quiz-table tr {
+        background: #f2f9ff;
+        border-radius: 28px;
+        padding: 20px 12px 16px;
+        margin-bottom: 20px;
+        box-shadow: 0 5px 12px rgba(0, 60, 100, 0.15);
+        border: 1px solid #c5dff5;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+      }
+
+      .quiz-table td {
+        padding: 8px 6px !important;
+        border-bottom: none !important;
+        background: transparent !important;
+      }
+
+      .question-cell {
+        font-size: 1.1rem;
+        font-weight: 600;
+        margin-bottom: 14px;
+        padding-left: 8px !important;
+        flex: 0 0 100%;
+      }
+
+      /* 三个选项单元格横排，等宽 */
+      .option-cell {
+        flex: 1 1 30%;           /* 弹性等宽 */
+        min-width: 90px;
+        padding: 4px 4px !important;
+        display: flex;
+        justify-content: center;
+      }
+
+      .radio-label {
+        width: 100%;
+        max-width: none;
+        padding: 12px 4px;
+        font-size: 1rem;
+        justify-content: center;
+        background: #ffffff;
+        border: 1px solid #b2d3ed;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+      }
+
+      /* 按钮组更紧凑 */
+      .action-group {
+        gap: 12px;
+      }
+
+      .btn-small {
+        min-width: 120px;
+        padding: 12px 16px;
+        font-size: 1rem;
+      }
+
+      .score-display {
+        padding: 8px 20px;
+      }
+    }
+
+    /* 超小屏 (≤ 400px) 让选项稍微换行保护 */
+    @media screen and (max-width: 400px) {
+      .option-cell {
+        flex: 0 0 100%;          /* 纵向排列，更易点按 */
+        margin-bottom: 6px;
+      }
+      .radio-label {
+        max-width: 220px;
+        margin: 0 auto;
+      }
+    }
+  </style>
+</head>
+<body>
+<div class="test-container">
+  <!-- 封面部分 -->
+  <div id="cover" class="panel">
+    <div class="cover-icon">🧊🌿</div>
+    <div class="cover-title">职业倦怠测试</div>
+    <div class="cover-sub">Burnout · 简易自评</div>
+    <div style="font-size: 1.1rem; color: #2b5f84; max-width: 500px; margin: 0 auto; background: #ffffffb0; padding: 18px; border-radius: 50px;">
+      12道题目 · 了解你的职场状态
+    </div>
+    <button class="btn" id="startBtn">👉 开始测试</button>
+    <div style="margin-top: 15px; color: #3d6985;">&nbsp;</div>
+  </div>
+
+  <!-- 内容部分 (问卷) 默认隐藏 -->
+  <div id="content" class="panel hidden">
+    <h2 style="color: #05415f; margin-bottom: 16px; font-weight: 500; border-left: 7px solid #3282b0; padding-left: 18px;">📋 倦怠自评量表</h2>
+    <div class="reminder">每项必选 · A经常=5分, B有时候=3分, C从来不=1分</div>
+
+    <table class="quiz-table" id="quizTable">
+      <thead>
+        <tr>
+          <th style="text-align: left; padding-left: 18px;">问题</th>
+          <th>A、经常</th>
+          <th>B、有时候</th>
+          <th>C、从来不</th>
+        </tr>
+      </thead>
+      <tbody id="quizBody">
+        <!-- 动态由js注入12道题 (保证与文档一致) -->
+      </tbody>
+    </table>
+
+    <div class="action-group">
+      <button class="btn btn-small" id="submitQuiz">提交 & 查看结果</button>
+      <button class="btn-small" style="background-color: #597f9b; box-shadow:0 5px 0 #2b4a63;" id="backToCoverFromContent">返回封面</button>
+    </div>
+    <p style="text-align: center; margin-top: 18px; color: #2a5f7a;">⚠️ 请全部作答，得分才会准确</p>
+  </div>
+
+  <!-- 结果部分 默认隐藏 -->
+  <div id="result" class="panel hidden result-box">
+    <h2 style="color: #05415f;">✨ 测评结果</h2>
+    <div class="score-display" id="scoreValue">0</div>
+    <div class="verdict" id="verdictText"></div>
+    <div class="action-group">
+      <button class="btn-small" id="retestBtn">🔄 重新测试</button>
+      <button class="btn-small" style="background-color: #597f9b; box-shadow:0 5px 0 #2b4a63;" id="backToCoverFromResult">封面</button>
+    </div>
+    <div class="footnote">根据职业倦怠测试文档 · 12~60分</div>
+  </div>
+</div>
+
+<script>
+  (function() {
+    // ----- 问题数组（与文档一字不差）-----
+    const questions = [
+      "1、你是否在工作餐时感觉没食欲,嘴巴发苦,对美食也失去兴趣?",
+      "2、你是否感觉工作负担过重,常常感觉难以承受。或有时感觉喘不过气来?",
+      "3、你是否感觉缺乏工作自主性,往往只是领导让做什么才做什么?",
+      "4、你是否认为自己基本上待遇微薄,付出没有得到应有的回报?",
+      "5、你是否经常在工作时感到困倦疲乏,想睡觉,做什么事儿都无精打采?",
+      "6、你有没有觉得待遇不公,常常有受委屈的感觉?",
+      "7、你是否在以前一直很上进,而现在却一心梦想着去休假?",
+      "8、你是否会觉得工作上常常发生与上级不和的情况?",
+      "9、你是否觉得自己和同事相处不好,有各种各样的隔阂存在?",
+      "10、你是否在工作中碰到一些麻烦事时急躁、易怒,甚至情绪失控?",
+      "11、你是否对别人的指责无能为力、无动于衷或者消极抵抗?",
+      "12、你是否觉得自己的工作不断重复而且单调乏味?"
+    ];
+
+    // 获取DOM
+    const coverPanel = document.getElementById('cover');
+    const contentPanel = document.getElementById('content');
+    const resultPanel = document.getElementById('result');
+    const quizBody = document.getElementById('quizBody');
+    const startBtn = document.getElementById('startBtn');
+    const submitBtn = document.getElementById('submitQuiz');
+    const backToCoverFromContent = document.getElementById('backToCoverFromContent');
+    const retestBtn = document.getElementById('retestBtn');
+    const backToCoverFromResult = document.getElementById('backToCoverFromResult');
+    const scoreSpan = document.getElementById('scoreValue');
+    const verdictDiv = document.getElementById('verdictText');
+
+    // ---------- 渲染表格：选项显示为“A经常”“B有时候”“C从来不” ----------
+    function renderQuiz() {
+      let htmlStr = '';
+      questions.forEach((q, index) => {
+        const rowNum = index + 1;
+        htmlStr += `<tr class="question-row" data-q="${rowNum}">`;
+        htmlStr += `<td class="question-cell">${q}</td>`;
+
+        // 选项A (经常) value=5  显示“A经常”
+        htmlStr += `<td class="option-cell">`;
+        htmlStr += `<label class="radio-label"><input type="radio" name="q${rowNum}" value="5"> <span class="letter-badge">A</span>经常</label>`;
+        htmlStr += `</td>`;
+
+        // 选项B (有时候) value=3 显示“B有时候”
+        htmlStr += `<td class="option-cell">`;
+        htmlStr += `<label class="radio-label"><input type="radio" name="q${rowNum}" value="3"> <span class="letter-badge">B</span>有时候</label>`;
+        htmlStr += `</td>`;
+
+        // 选项C (从来不) value=1 显示“C从来不”
+        htmlStr += `<td class="option-cell">`;
+        htmlStr += `<label class="radio-label"><input type="radio" name="q${rowNum}" value="1"> <span class="letter-badge">C</span>从来不</label>`;
+        htmlStr += `</td>`;
+
+        htmlStr += `</tr>`;
+      });
+      quizBody.innerHTML = htmlStr;
+    }
+    renderQuiz();
+
+    // ---------- 辅助函数：显示某个panel，隐藏其他 ----------
+    function showPanel(panelToShow) {
+      [coverPanel, contentPanel, resultPanel].forEach(p => p.classList.add('hidden'));
+      panelToShow.classList.remove('hidden');
+    }
+
+    // ---------- 重置所有radio ----------
+    function resetAllRadios() {
+      const allRadios = document.querySelectorAll('#content input[type="radio"]');
+      allRadios.forEach(radio => radio.checked = false);
+    }
+
+    // ---------- 计算得分：全部已选返回总分，否则alert ----------
+    function calculateScore() {
+      let totalScore = 0;
+      for (let i = 1; i <= 12; i++) {
+        const selected = document.querySelector(`input[name="q${i}"]:checked`);
+        if (!selected) {
+          alert(`第 ${i} 题尚未回答，请完成所有题目。`);
+          return null;
+        }
+        totalScore += parseInt(selected.value, 10);
+      }
+      return totalScore;
+    }
+
+    // ---------- 根据得分生成评语 (文档原文) ----------
+    function getVerdict(score) {
+      if (score >= 12 && score <= 20) {
+        return "你没有患上职业倦怠症，你的工作状态不错；";
+      } else if (score >= 21 && score <= 40) {
+        return "你已经开始出现了职业倦怠症的前期症状，要警惕，并应尽快加以调节；";
+      } else if (score >= 41 && score <= 60) {
+        return "你对现在的工作几乎已经失去兴趣和信心，工作状态很不佳，长此以往对个人的身心健康和工作都非常不利，应当引起重视，可以请求心理咨询师给予咨询和帮助。";
+      } else {
+        return "得分异常，请重新测试。";
+      }
+    }
+
+    // ---------- 显示结果面板 ----------
+    function showResultPage(score) {
+      scoreSpan.textContent = score;
+      verdictDiv.textContent = getVerdict(score);
+      showPanel(resultPanel);
+    }
+
+    // ---------- 事件绑定 ----------
+    startBtn.addEventListener('click', () => {
+      resetAllRadios();      // 每次从封面进入都重置，保证全新开始
+      showPanel(contentPanel);
+    });
+
+    backToCoverFromContent.addEventListener('click', () => {
+      showPanel(coverPanel);
+    });
+
+    submitBtn.addEventListener('click', () => {
+      const score = calculateScore();
+      if (score !== null) {
+        showResultPage(score);
+      }
+    });
+
+    retestBtn.addEventListener('click', () => {
+      resetAllRadios();
+      showPanel(coverPanel);
+    });
+
+    backToCoverFromResult.addEventListener('click', () => {
+      showPanel(coverPanel);
+    });
+
+    // 初始显示封面
+    showPanel(coverPanel);
+  })();
+</script>
+</body>
+</html>
